@@ -1,49 +1,40 @@
-class App {
+const fill = document.querySelector('.fill');
+const empties = document.querySelectorAll('.empty');
 
-  static init() {
+// Fill listeners
+fill.addEventListener('dragstart', dragStart);
+fill.addEventListener('dragend', dragEnd);
 
-    App.box = document.getElementsByClassName('box')[0]
-
-    App.box.addEventListener("dragstart", App.dragstart)
-    App.box.addEventListener("dragend", App.dragend)
-
-    const containers = document.getElementsByClassName('holder')
-
-    for(const container of containers) {
-      container.addEventListener("dragover", App.dragover)
-      container.addEventListener("dragenter", App.dragenter)
-      container.addEventListener("dragleave", App.dragleave)
-      container.addEventListener("drop", App.drop)
-    }
-  }
-
-  static dragstart() {
-    this.className += " held"
-//   setTimeout(()=>this.className="invisible", 0)
-  }
-
-  static dragend() {
-    this.className = "box"
-  }
-
-  static dragover(e) {
-    e.preventDefault()
-  }
-
-  static dragenter(e) {
-    e.preventDefault()
-    this.className += " hovered"
-  }
-
-  static dragleave() {
-    this.className = "holder"
-  }
-
-  static drop() {
-    this.className = "holder"
-    this.append(App.box)
-  }
-
+for(const empty of empties) {
+  empty.addEventListener('dragover', dragOver);
+  empty.addEventListener('dragenter', dragEnter);
+  empty.addEventListener('dragleave', dragLeave);
+  empty.addEventListener('drop', dragDrop);
 }
 
-document.addEventListener("DOMContentLoaded", App.init)
+function dragStart() {
+  this.className += ' hold';
+  setTimeout(() => (this.className = 'invisible'), 0);
+}
+
+function dragEnd() {
+  this.className = 'fill';
+}
+
+function dragOver(e) {
+  e.preventDefault(); // default action is not to move the img in that div
+}
+
+function dragEnter(e) {
+  e.preventDefault();
+  this.className += ' hovered'; // empty + hovered both classes
+}
+
+function dragLeave() {
+  this.className = 'empty'; // only empty hovered is removed
+}
+
+function dragDrop() {
+  this.className = 'empty';
+  this.append(fill);
+}
